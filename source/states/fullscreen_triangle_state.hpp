@@ -35,6 +35,7 @@ class FullscreenTriangleState: public our::State {
         program.attach(fragment_shader_path, GL_FRAGMENT_SHADER);
         program.link();
 
+
         // We call use() since we will send uniforms to this program
         program.use();
         // We loop over every uniform in the configuration and send to the program
@@ -56,6 +57,7 @@ class FullscreenTriangleState: public our::State {
 
         //TODO: Create a vertex Array
         glGenVertexArrays(1, &VAO);
+        
 
         // We set the clear color to be black
         glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -68,11 +70,13 @@ class FullscreenTriangleState: public our::State {
 
         //TODO: Draw a triangle using the vertex array and the program
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(VAO);
+        program.use();
     }
 
     // onInitialize() function is called once after the state ends
     void onDestroy() override {
         //TODO: Delete the vertex Array
-        glDeleteVertexArrays(3, &VAO);
+        glDeleteVertexArrays(1, &VAO);
     }
 };
