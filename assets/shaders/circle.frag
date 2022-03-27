@@ -6,8 +6,8 @@ out vec4 frag_color;
 uniform vec2 center;
 uniform float radius;
             
-uniform vec4 inside_color = vec4(1.0, 0.0, 0.0, 1.0);
-uniform vec4 outside_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 inside_color;
+uniform vec4 outside_color;
 
 void main(){
     // Defining the x and y coordinates of the center point
