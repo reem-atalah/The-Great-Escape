@@ -15,9 +15,9 @@ namespace glm {
 class FullscreenTriangleState: public our::State {
     
     our::ShaderProgram program;
+
     //TODO: Add a variable in which we will store the name (ID) for a vertex array
-       GLuint VAO; // vertix Array Object
-    //glGenVertexArrays(1,&VAO);  //no benefits untill now
+    GLuint VAO; // vertix Array Object
 
     // onInitialize() function is called once before the state starts
     void onInitialize() override {
@@ -56,9 +56,9 @@ class FullscreenTriangleState: public our::State {
         }
 
         //TODO: Create a vertex Array
+        //No need so far, but won't be able to draw unless it is created
         glGenVertexArrays(1,&VAO);
        
-
         // We set the clear color to be black
         glClearColor(0.0, 0.0, 0.0, 1.0);
     }
@@ -71,11 +71,11 @@ class FullscreenTriangleState: public our::State {
         //TODO: Draw a triangle using the vertex array and the program
         program.use();//glUseProgram(program);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES,0,6);
+        glDrawArrays(GL_TRIANGLES,0,3);
        
     }
 
-    // onInitialize() function is called once after the state ends
+    // onDestroy() function is called once after the state ends
     void onDestroy() override {
         //TODO: Delete the vertex Array
         glDeleteVertexArrays(1, &VAO);

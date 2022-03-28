@@ -35,10 +35,8 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
 
 
     //TODO: send the source code to the shader and compile it
-
     glShaderSource(shaderID,1,&sourceCStr,nullptr); //null
     glCompileShader(shaderID);
-
     
     // Here we check for compilation errors
     //TODO: Uncomment this if block
@@ -48,10 +46,10 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
         glDeleteShader(shaderID);
         return false;
     }
-
     
     //TODO: attach the shader to the program then delete the shader
     glAttachShader(this->program,shaderID);
+    // No need to keep the shader since we attached it
     glDeleteShader(shaderID);
 
     //We return true since the compilation succeeded
