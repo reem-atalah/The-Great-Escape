@@ -12,74 +12,55 @@ namespace our {
     class ShaderProgram {
 
     private:
-        //Shader Program Handle
+        //Shader Program Handle (OpenGL object name)
         GLuint program;
 
     public:
-        void create();
-        void destroy();
-
-        ShaderProgram(){ program = 0; }
-        ~ShaderProgram(){ destroy(); }
+        ShaderProgram(){ program = glCreateProgram(); }
+        ~ShaderProgram(){ if(program != 0) glDeleteProgram(program); }
 
         bool attach(const std::string &filename, GLenum type) const;
 
         bool link() const;
 
         void use() { 
-            //TODO: call opengl to use the program identified by this->program
-            glUseProgram(this->program);
+            glUseProgram(program);
         }
 
         GLuint getUniformLocation(const std::string &name) {
-            //TODO: call opengl to get the uniform location for the uniform defined by name from this->program
-            // Change the string to a char ptr
-            const char *name_str = name.c_str();
-            // Get the location of that name from the uniform memory
-            return glGetUniformLocation(this->program,name_str);
+            return glGetUniformLocation(program, name.c_str());
         }
 
         void set(const std::string &uniform, GLfloat value) {
-            //TODO: call opengl to set the value to the uniform defined by name
-            GLuint Location=getUniformLocation(uniform);
-            // Write the value read from the json, into the location of the corresponding uniform
-            glUniform1f(Location,value);
+            glUniform1f(getUniformLocation(uniform), value);
+        }
+
+        void set(const std::string &uniform, GLuint value) {
+            glUniform1ui(getUniformLocation(uniform), value);
+        }
+
+        void set(const std::string &uniform, GLint value) {
+            glUniform1i(getUniformLocation(uniform), value);
         }
 
         void set(const std::string &uniform, glm::vec2 value) {
-            //TODO: call opengl to set the value to the uniform defined by name
-            GLuint Location=getUniformLocation(uniform);
-            //float fvalue[]={value[0],value[1]};
-            glUniform2fv(Location,1,value_ptr(value));
+            glUniform2f(getUniformLocation(uniform), value.x, value.y);
         }
 
         void set(const std::string &uniform, glm::vec3 value) {
-            //TODO: call opengl to set the value to the uniform defined by name
-            GLuint Location=getUniformLocation(uniform);
-            
-            // First parameter: take the location of the uniform
-            // Second Parameter: the number of array elements to be passed.
-            // Third Parameter: pointer to the value to be put in that location
-            glUniform3fv(Location,1,value_ptr(value));
+            glUniform3f(getUniformLocation(uniform), value.x, value.y, value.z);
         }
 
         void set(const std::string &uniform, glm::vec4 value) {
-            //TODO: call opengl to set the value to the uniform defined by name
-             GLuint Location=getUniformLocation(uniform);
-            
-            // Write a vec4 value read from the json, into the location of the corresponding uniform
-            // e.g. take the value of the inside_color vector from the json file,
-            // and put it in the location of the inside_color uniform in the fragment shader.
-            glUniform4fv(Location,1,value_ptr(value));
+            glUniform4f(getUniformLocation(uniform), value.x, value.y, value.z, value.w);
         }
 
+        void set(const std::string &uniform, glm::mat4 matrix) {
+            glUniformMatrix4fv(getUniformLocation(uniform), 1, false, glm::value_ptr(matrix));
+        }
 
-        //TODO: Delete the copy constructor and assignment operator
-        ShaderProgram (const ShaderProgram &) = delete;
-        ShaderProgram & operator= (const ShaderProgram&) = delete;
-        //Question: Why do we do this? Hint: Look at the deconstructor :)
-        //To disallow copying objects, so that no 2 objects have the same program id.
-        //This is done to prevent the case of having an object of shaderprogram pointing to a deleted program already. 
+        ShaderProgram(ShaderProgram const &) = delete;
+        ShaderProgram &operator=(ShaderProgram const &) = delete;
     };
 
 }
