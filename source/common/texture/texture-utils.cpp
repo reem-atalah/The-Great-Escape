@@ -36,6 +36,34 @@ our::Texture2D* our::texture_utils::loadImage(const std::string& filename, bool 
     //Bind the texture such that we upload the image data to its storage
     //TODO: (Req 4) Finish this function to fill the texture with the data found in "pixels" and generate the mipmaps if requested
 
+    ///////////////////////////////////////////////////////////////
+
+    // glActiveTexture(GL_TEXTURE0);  works without it .. it seems that in testure-test-state.hpp , it was called there but so does the binding so why binding is a must?
+    texture->bind();
+    // send image data to our texture 
+    // target : specifies the target texture which is here GL_TEXTURE_2D
+    // level  : specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image  
+    // internal format :Specifies the number of color components in the texture (ex:RGB ,RGBA)
+    // width : Specifies the width of the texture image
+    // height : Specifies the height of the texture image
+    // border : This value must be 0
+    // format : Specifies the format of the pixel data
+    // type: Specifies the data type of the pixel data
+    // data: Specifies a pointer to the image data in memory. 
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)pixels);
+    
+    if (generate_mipmap){
+
+        // if needed we will generate mipmap 
+        // which has several levels .The default is 0 which is of the same size of the image 
+        // say the image is 8*8 so level 0 has 8*8 dimensions
+        // by increasing the levels , the pixels got reduced half the dimansions by averaging
+        // so level 1 has 4*4 dimensions & level 2 has 2 *2  and lastly level 3 is 1 pixel  
+      glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    //////////////end of my code /////////////////
+
+
     stbi_image_free(pixels); //Free image data after uploading to GPU
     return texture;
 }
