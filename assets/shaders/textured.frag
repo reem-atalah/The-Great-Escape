@@ -13,5 +13,10 @@ uniform sampler2D tex;
 void main(){
     //TODO: (Req 6) Modify the following line to compute the fragment color
     // by multiplying the tint with the vertex color and with the texture color 
-    frag_color = vec4(0.0, 0.0, 0.0, 1.0);
+    
+    // Sample the texture color at the corresponding texture coordinate
+    vec4 texture_color = texture(tex, fs_in.tex_coord);
+    // Muliply the tint, texture_color and the interpolated color from the vshader.
+    // And output the final color to the screen buffer.
+    frag_color = tint * texture_color * fs_in.color;
 }

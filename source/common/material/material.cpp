@@ -8,6 +8,12 @@ namespace our {
     // This function should setup the pipeline state and set the shader to be used
     void Material::setup() const {
         //TODO: (Req 6) Write this function
+        
+        // Using the program that is attached to the 2 shaders fshader and vshader of the current material
+        shader->use();
+
+        // Enabling and Setting the OpenGL options with the values specified in the pipeline struct
+        pipelineState.setup();
     }
 
     // This function read the material data from a json object
@@ -25,6 +31,12 @@ namespace our {
     // set the "tint" uniform to the value in the member variable tint 
     void TintedMaterial::setup() const {
         //TODO: (Req 6) Write this function
+        
+        // Calling the setup of the parent to set the pipeline state and the shader to be used with drawing the object
+        Material::setup();
+
+        // Set the tint uniform value in the shader with the member variable value 'tint' read from the json object
+        shader->set("tint", tint);
     }
 
     // This function read the material data from a json object
@@ -39,6 +51,21 @@ namespace our {
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
     void TexturedMaterial::setup() const {
         //TODO: (Req 6) Write this function
+
+        // Calling the setup of the parent to set the tint, the pipeline state and the shader to be used with drawing the object
+        TintedMaterial::setup();
+
+        // Set the alphaThreshold uniform value in the shader with the member variable value 'alphaThreshold' read from the json object
+        shader->set("alphaThreshold", alphaThreshold);
+
+        // ??? Which texture unit to bind on ???
+        int textUnitNumber = 0;
+        GLenum texUnitEnum = GL_TEXTURE0 + textUnitNumber;
+        glActiveTexture(texUnitEnum);
+        texture->bind();
+        sampler->bind(textUnitNumber);
+
+        shader->set("tex", textUnitNumber);
     }
 
     // This function read the material data from a json object
