@@ -142,14 +142,20 @@ namespace our {
             return false;
         });
 
-        //TODO: (Req 8) Get the camera ViewProjection matrix and store it in VP
+        //TODO: (Req 8) Get the camera ViewProjection matrix and store it in VP  -- not yet done 
         glm::mat4 VP = glm::mat4(1.0f);
         //TODO: (Req 8) Set the OpenGL viewport using windowSize
+        glViewport(windowSize.x,windowSize.y,windowSize.r,windowSize.s);  //check on the parameters passed!
+
 
         //TODO: (Req 8) Set the clear color to black and the clear depth to 1
-        
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearDepth(1.0);
+
         //TODO: (Req 8) Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
-        
+        glColorMask(true, true, true, true);
+        glDepthMask(true);
+
 
         // If there is a postprocess material, bind the framebuffer
         if(postprocessMaterial){
@@ -158,7 +164,8 @@ namespace our {
         }
 
         //TODO: (Req 8) Clear the color and depth buffers
-        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         
