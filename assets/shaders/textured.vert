@@ -13,7 +13,10 @@ uniform mat4 transform;
 
 void main(){
     //TODO: (Req 6) Change the next line to apply the transformation matrix
-    gl_Position = vec4(position, 1.0);
+    
+    // Transform the position by mulitplying it with the transform matrix
+    gl_Position = transform * vec4(position, 1.0);
+    // Sending the color and tex_coord to the fshader
     vs_out.color = color;
     vs_out.tex_coord = tex_coord;
 }
