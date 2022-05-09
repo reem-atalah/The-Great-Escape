@@ -135,17 +135,37 @@ namespace our {
 
         //TODO: (Req 8) Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
         // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
-        glm::vec3 cameraForward = glm::vec3(0.0, 0.0, 0.0);
-        std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
+        // you need M which is model matrix in MVP to change from local to world coordinates
+        // then you multiply it by the Mcamera.
+        // inorder to folmulate camera you pass eye, center,up direction
+        // so getting the camera forward is simply center -eye 
+        // and you normalize it so you are only interested in the direction to be used later  
+        auto owner = camera->getOwner();
+        auto M = owner->getLocalToWorldMatrix();
+        glm::vec3 cameraForward= glm::normalize((glm::vec3(M* glm::vec4 (glm::vec3(0,0,-1), 1))) - (glm::vec3(M* glm::vec4 ( glm::vec3(0,0,0),1))));
+
+
+        std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward] (const RenderCommand& first, const RenderCommand& second){
             //TODO: (Req 8) Finish this function
             // HINT: the following return should return true "first" should be drawn before "second". 
+
+            // here we provide the comparison criteria in the sort function
+            // which is just a boolean expression telling if the first is locates further than the second or not
+            // if the distance between the first furthest from the camera than the second we return true
+            // so the furthest could be drawn first (as a criteria fro correct rendering)
+            if(glm::dot(first.center,cameraForward) > glm::dot(second.center,cameraForward)){
+                return true;
+            }
             return false;
         });
 
-        //TODO: (Req 8) Get the camera ViewProjection matrix and store it in VP  -- not yet done 
-        glm::mat4 VP = glm::mat4(1.0f);
+        //TODO: (Req 8) Get the camera ViewProjection matrix and store it in VP  -- not sure
+        // just formulating the view projection matrix (remember the right most matrix is multiplied first )
+        glm::mat4 VP = camera->getProjectionMatrix(windowSize)*camera->getViewMatrix();
+        // glm::mat4 VP = glm::mat4(1.0f);
         //TODO: (Req 8) Set the OpenGL viewport using windowSize
-        glViewport(windowSize.x,windowSize.y,windowSize.r,windowSize.s);  //check on the parameters passed!
+        // passing the dimension of drawing on the view port which is basically here the window dimensions 
+        glViewport(0,0,windowSize.x,windowSize.y);  //check on the parameters passed!
 
 
         //TODO: (Req 8) Set the clear color to black and the clear depth to 1
@@ -168,6 +188,18 @@ namespace our {
 
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
+        // drawing each opaque pixel by pixel
+        // by setting up all the requirements such as 
+        // binding to the program created , setting the textures , culling and all other properties needed 
+        // then we pass the MVP to the shader 
+        // and draw it
+        for (auto& opaqueCommand : opaqueCommands){
+            opaqueCommand.material->setup();
+            opaqueCommand.material->shader->set("transform",VP*opaqueCommand.localToWorld);
+            opaqueCommand.mesh->draw();
+        }
+    
+
         
         // If there is a sky material, draw the sky
         if(this->skyMaterial){
@@ -193,6 +225,12 @@ namespace our {
         }
         //TODO: (Req 8) Draw all the transparent commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
+         for (auto& transparentCommand : transparentCommands){
+            transparentCommand.material->setup();
+            transparentCommand.material->shader->set("transform",VP*transparentCommand.localToWorld);
+            transparentCommand.mesh->draw();
+        }
+
         
 
         // If there is a postprocess material, apply postprocessing
