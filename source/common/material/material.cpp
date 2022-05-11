@@ -16,7 +16,7 @@ namespace our {
         pipelineState.setup();
     }
 
-    // This function read the material data from a json object
+    // This function read the material data from a json object 
     void Material::deserialize(const nlohmann::json& data){
         if(!data.is_object()) return;
 

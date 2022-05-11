@@ -30,7 +30,7 @@ namespace our
         // These window size will be used on multiple occasions (setting the viewport, computing the aspect ratio, etc.)
         glm::ivec2 windowSize;
         // These are two vectors in which we will store the opaque and the transparent commands.
-        // We define them here (instead of being local to the "render" function) as an optimization to prevent reallocating them every frame
+        // We define them here (instead of being local to the "render" function) as an optimization to prevent re-allocating them every frame
         std::vector<RenderCommand> opaqueCommands;
         std::vector<RenderCommand> transparentCommands;
         // Objects used for rendering a skybox

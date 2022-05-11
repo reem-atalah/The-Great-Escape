@@ -30,6 +30,7 @@ namespace our {
 
     // This material adds a uniform for a tint (a color that will be sent to the shader)
     // An example where this material can be used is when the whole object has only color which defined by tint
+    // when we want to put one color(tint) -> reem
     class TintedMaterial : public Material {
     public:
         glm::vec4 tint;
@@ -43,6 +44,7 @@ namespace our {
     // - "tex" which is a Sampler2D. "texture" and "sampler" will be bound to it.
     // - "alphaThreshold" which defined the alpha limit below which the pixel should be discarded
     // An example where this material can be used is when the object has a texture
+    //color and texture -> reem
     class TexturedMaterial : public TintedMaterial {
     public:
         Texture2D* texture;
