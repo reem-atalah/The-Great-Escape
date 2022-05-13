@@ -2,12 +2,26 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
+#include <glm/glm.hpp>
 
 #include <iostream>
 
 our::Texture2D* our::texture_utils::empty(GLenum format, glm::ivec2 size){
     our::Texture2D* texture = new our::Texture2D();
     //TODO: (Req 10) Finish this function to create an empty texture with the given size and format
+    texture->bind();
+
+    // target : specifies the target texture which is here GL_TEXTURE_2D
+    // mip level  : specifies the level-of-detail number. Level 0 is the base  level.
+    // internal format :Specifies the number of color components in the texture (ex:RGB ,RGBA)
+    // width : Specifies the width of the texture
+    // height : Specifies the height of the texture
+    if(format==GL_RGBA8){
+    int levels = (int)glm::floor(glm::log2((float)glm::max(size.x, size.y))) + 1;    
+    glTexStorage2D(GL_TEXTURE_2D, levels, format, size.x, size.y);
+    }else{
+    glTexStorage2D(GL_TEXTURE_2D, 1, format, size.x, size.y);    
+    }
     
     return texture;
 }
