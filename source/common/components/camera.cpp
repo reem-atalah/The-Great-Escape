@@ -23,19 +23,7 @@ namespace our {
     glm::mat4 CameraComponent::getViewMatrix() const {
         auto owner = getOwner();
         auto M = owner->getLocalToWorldMatrix();
-        // float addx=M[0][3];
-        // float addy=M[1][3];
-        // float addz=M[2][3];
-        //  glm::mat4 view=glm::lookAt(
-        //   glm::vec3(0+addx,0+addy,0+addz),  //eye where i look
-        //   glm::vec3(0+addx,0+addy,-1+addz),  //center of view (orgin)
-        //   glm::vec3(0+addx,1+addy,0+addz)  //up direction of up
-        // );
-        glm::mat4 view=glm::lookAt(
-            glm::vec3(M* glm::vec4 (glm::vec3(0,0,0), 1)),  //eye where i look
-            glm::vec3(M* glm::vec4 ( glm::vec3(0,0,-1),1)),  //center of view (orgin)
-            glm::vec3(M* glm::vec4 ( glm::vec3(0,1,0),1))  //up direction of up
-        );
+        
         //TODO: (Req 7) Complete this function
         //HINT:
         // In the camera space:
@@ -48,7 +36,11 @@ namespace our {
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
         // then you can use glm::lookAt
-        //return glm::mat4(1.0f);
+        glm::mat4 view=glm::lookAt(
+            glm::vec3(M* glm::vec4 (glm::vec3(0,0,0), 1)),  //eye where i look
+            glm::vec3(M* glm::vec4 ( glm::vec3(0,0,-1),1)),  //center of view (orgin)
+            glm::vec3(M* glm::vec4 ( glm::vec3(0,1,0),1))  //up direction of up
+        );
         return view;
     }
 

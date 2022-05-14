@@ -39,34 +39,40 @@ namespace our {
             glBindBuffer(GL_ARRAY_BUFFER,VBO);
             glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(Vertex),(void*) vertices.data(),GL_STATIC_DRAW); //GL_STATIC_DRAW -> data will not change
 
-            
+            // take the index of the attribArray
             glEnableVertexAttribArray(ATTRIB_LOC_POSITION);
-            //                                     jump how much every time(stride) 0 is the same meaning as 4*sizeof(float) ,offset from begin
+            //GLuint index->index of the attribArray
+            //GLint size ->nuber of elements for the positions
+            //GLenum type -> type of position element,
+            //GLboolean normalized -> flase not apply normalization for values
+            //GLsizei stride ->jump how much every time 
+            //void *pointer ->offset from begin
             glVertexAttribPointer(ATTRIB_LOC_POSITION,3,GL_FLOAT,false,sizeof(Vertex),(void*) offsetof(Vertex,position));
-            
 
             
             glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
-            //                                     jump how much every time(stride) 0 is the same meaning as 4*sizeof(float) ,offset from begin (3*sizeof(float))
+            //GLboolean normalized -> true, apply normalization for values
             glVertexAttribPointer(ATTRIB_LOC_COLOR,4,GL_UNSIGNED_BYTE,true,sizeof(Vertex),(void*) offsetof(Vertex,color));
             
 
             
             glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD);
-            //                                     jump how much every time(stride) 0 is the same meaning as 4*sizeof(float) ,offset from begin (3 float + 4 byte) 
             glVertexAttribPointer(ATTRIB_LOC_TEXCOORD,2,GL_FLOAT,false,sizeof(Vertex),(void*) offsetof(Vertex,tex_coord));
             
 
             
             glEnableVertexAttribArray(ATTRIB_LOC_NORMAL);
-            //                                     jump how much every time(stride) 0 is the same meaning as 4*sizeof(float) ,offset from begin (3*sizeof(float))
             glVertexAttribPointer(ATTRIB_LOC_NORMAL,3,GL_FLOAT,false,sizeof(Vertex),(void*) offsetof(Vertex,normal));
            
 
             elementCount=elements.size();
             glGenBuffers(1,&EBO);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER,elementCount*sizeof(unsigned int),(void*)elements.data(),GL_STATIC_DRAW); //GL_STATIC_DRAW -> data will not change
+            //GLenum target -> GL_ELEMENT_ARRAY_BUFFER
+            //GLsizeiptr size ->size of elements in number of bytes,
+            //const void *data -> pointer to data
+            //GLenum usage -> GL_STATIC_DRAW -> data will not change
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER,elementCount*sizeof(unsigned int),(void*)elements.data(),GL_STATIC_DRAW); 
 
             //glBindVertexArray(0);
         }
@@ -75,8 +81,14 @@ namespace our {
         void draw() 
         {
             //TODO: (Req 1) Write this function
+            // Bind Vertix array
             glBindVertexArray(VAO);
+            //GLenum mode -> GL_TRIANGLES
+            //GLsizei count-> count of elements use to drow
+            //GLenum type -> type of elements is unsigned int
+            //const void *indices-> offset from begin of elements 
             glDrawElements(GL_TRIANGLES,elementCount,GL_UNSIGNED_INT,(void*)0);
+            // UnBind Vertix array
             glBindVertexArray(0);
         }
 

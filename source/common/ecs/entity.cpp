@@ -14,7 +14,8 @@ namespace our {
         //TODO: (Req 7) Write this function
           if(parent==nullptr)
              return localTransform.toMat4();
-          else   
+          else
+             // change the location of the parent will affect the child location to world   
              return parent->getLocalToWorldMatrix() * localTransform.toMat4();
         //return glm::mat4(1.0f);
     }

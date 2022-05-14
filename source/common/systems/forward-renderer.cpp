@@ -65,12 +65,18 @@ namespace our {
             // The depth format can be (Depth component with 24 bits).
 
             
-
+            // GL_RGBA8 or GL_DEPTH_COMPONENT24 is the formate
+            // windowSize the size that has the effect
             colorTarget = texture_utils::empty(GL_RGBA8, windowSize);
             depthTarget= texture_utils::empty(GL_DEPTH_COMPONENT24, windowSize);
 
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
-
+            // attach to Frame Buffer
+            //GLenum target-> GL_DRAW_FRAMEBUFFER 
+            //GLenum attachment-> GL_COLOR_ATTACHMENT0  attach the coloe or the Depth GL_DEPTH_ATTACHMENT
+            // GLenum textarget -> 2D texture GL_TEXTURE_2D
+            // GLuint texture -> the name for the teture
+            // GLint level-> mast be 0
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(), 0);
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
             
@@ -274,6 +280,7 @@ namespace our {
             //TODO: (Req 10) Setup the postprocess material and draw the fullscreen triangle
             postprocessMaterial->setup();
             glBindVertexArray(postProcessVertexArray);
+            //draw the fullscreen triangle
             glDrawArrays(GL_TRIANGLES,0,3);
             
             
