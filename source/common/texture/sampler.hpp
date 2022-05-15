@@ -26,7 +26,8 @@ namespace our {
         // This method binds this sampler to the given texture unit
         void bind(GLuint textureUnit) const {
             //TODO: (Req 5) Complete this function
-            glBindSampler(textureUnit, name); //bind at GL_TEXTUREx
+            glBindSampler(textureUnit, name); 
+            //bind at GL_TEXTUREx, e.g: GL_TEXTURE_0 at 0 place in the beginning of array
         }
 
         // This static method ensures that no sampler is bound to the given texture unit
@@ -39,20 +40,20 @@ namespace our {
         // This can be used to set the filtering and wrapping parameters
         void set(GLenum parameter, GLint value) const {
             //TODO: (Req 5) Complete this function
-            glSamplerParameteri(name, parameter, value);
+            glSamplerParameteri(name, parameter, value);//integer
         }
 
         // This function sets a sampler paramter where the value is of type "GLfloat"
         // This can be used to set the "GL_TEXTURE_MAX_ANISOTROPY_EXT" parameter
         void set(GLenum parameter, GLfloat value) const {
             //TODO: (Req 5) Complete this function
-            glSamplerParameterf(name, parameter, value);
+            glSamplerParameterf(name, parameter, value);//float
         }
 
         // This function sets a sampler paramter where the value is of type "GLfloat[4]"
         // This can be used to set the "GL_TEXTURE_BORDER_COLOR" parameter
         void set(GLenum parameter, glm::vec4 value) const {
-            glSamplerParameterfv(name, parameter, &(value.r));
+            glSamplerParameterfv(name, parameter, &(value.r));//float vector
         }
 
         // Given a json object, this function deserializes the sampler state

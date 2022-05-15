@@ -18,6 +18,8 @@ void main(){
     //TODO: (Req 2) Change the next line to apply the transformation matrix
 
     gl_Position = vec4(position, 1.0);
+
+    //apply the transformation matrix on the actual position
     gl_Position =  transform * gl_Position;
 
     // No need to change any of the following lines

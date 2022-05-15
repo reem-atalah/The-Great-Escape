@@ -13,13 +13,18 @@ namespace our {
     glm::mat4 Transform::toMat4() const {
         //TODO: (Req 2) Write this function
 
+        //this is 3rd so we have the forth row and column as 1
+        //put the values of scale in the right place in scale matrix
         glm::mat4 scaling_matrix=
                                 glm::mat4(glm::vec4(scale[0],0,0,0), 
                                 glm::vec4(0,scale[1],0,0), 
                                 glm::vec4(0,0,scale[2],0) , 
                                 glm::vec4(0,0,0,1));
 
+        //y:yaw, x:pitch, z:roll
+        //convert euler angles coming from outside stored in rotation variable to a rotation matrix 
         glm::mat4 rotation_matrix= glm::yawPitchRoll(rotation.y, rotation.x, rotation.z);
+
 
         glm::mat4 translation_matrix= glm::mat4(glm::vec4(1,0,0,0), 
                                                 glm::vec4(0,1,0,0), 

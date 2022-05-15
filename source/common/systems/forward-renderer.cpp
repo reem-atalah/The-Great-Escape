@@ -24,12 +24,15 @@ namespace our {
             // We will draw the sphere from the inside, so what options should we pick for the face culling.
             PipelineState skyPipelineState{};
            
+           // enable depth testing to be used
             skyPipelineState.depthTesting.enabled=true;
             // skyPipelineState.depthTesting.function=GL_LEQUAL;//default
             
+            // enable face Culling to be used
             skyPipelineState.faceCulling.enabled=true;
             skyPipelineState.faceCulling.culledFace=GL_FRONT; 
-            // skyPipelineState.faceCulling.frontFace =GL_CCW; //default
+            // skyPipelineState.faceCulling.frontFace =GL_CCW; //default 
+            //after removing front, it's arleady moves in counter clock wise
             
             
             // Load the sky texture (note that we don't need mipmaps since we want to avoid any unnecessary blurring while rendering the sky)
@@ -234,7 +237,10 @@ namespace our {
             //TODO: (Req 9) setup the sky material
             this->skyMaterial->setup();
             //TODO: (Req 9) Get the camera position
-            glm::vec4 cameraPosition= M* glm::vec4 (glm::vec3(0,0,0), 1); //M*eye, M->model matrix transformation, eye->where camera looks
+            glm::vec4 cameraPosition= M* glm::vec4 (glm::vec3(0,0,0), 1); 
+            //M*eye, M->model matrix transformation, eye->where camera looks
+            //M*eye gives the camera position
+
             //TODO: (Req 9) Create a model matrix for the sky such that it always follows the camera (sky sphere center = camera position)
 
             // transform the sky to the position of the camera where sky sphere center = camera position
@@ -247,7 +253,7 @@ namespace our {
 
             //make z=1 
             // 1. don't multiply z coeff -> 0
-            // 2. take value of w to be z , and at normalization it will be 1
+            // 2. take value of w to be z , and at normalization it will be 1 where it divides by w
             glm::mat4 alwaysBehindTransform = glm::mat4(
             //  Row1, Row2, Row3, Row4
             //               z
@@ -257,6 +263,7 @@ namespace our {
                 0.0f, 0.0f, 1.0f, 1.0f  // Column4 we want the value of w 
             );
             //TODO: (Req 9) set the "transform" uniform
+            //apply the transformation of sky to follow the camera * camera ViewProjection matrix * matrix making z=1
             this->skyMaterial->shader->set("transform", alwaysBehindTransform * VP * skyModelMat);
 
             //TODO: (Req 9) draw the sky sphere
