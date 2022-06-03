@@ -7,6 +7,11 @@ namespace our {
     void ForwardRenderer::initialize(glm::ivec2 windowSize, const nlohmann::json& config){
         // First, we store the window size for later use
         this->windowSize = windowSize;
+        enum class LightType {
+        DIRECTIONAL,
+        POINT,
+        SPOT
+        };
 
         // Then we check if there is a sky texture in the configuration
         if(config.contains("sky")){
@@ -137,8 +142,10 @@ namespace our {
     void ForwardRenderer::render(World* world){
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
+        //LightComponent *light=nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
+        lightsCommands.clear();
         for(auto entity : world->getEntities()){
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
@@ -157,6 +164,21 @@ namespace our {
                 // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
+            }
+
+            if(auto lightRenderer = entity->getComponent<LightComponent>(); lightRenderer){
+                // We construct a command from it
+                LightCommand command;
+                command.localToWorld=lightRenderer->getOwner()->getLocalToWorldMatrix();
+                command.lightType = lightRenderer->lightType;
+                command.attenuation = lightRenderer->attenuation;
+                command.cone_angles = lightRenderer->cone_angles;
+                command.diffuse = lightRenderer->diffuse;
+                command.specular = lightRenderer->specular;
+                command.direction=glm::vec3(command.localToWorld * glm::vec4(-1, 0, 0, 1));
+                command.position= glm::vec3(command.localToWorld* glm::vec4 (glm::vec3(2,0,0), 1)); 
+
+                lightsCommands.push_back(command);
             }
         }
 
@@ -224,9 +246,51 @@ namespace our {
         // binding to the program created , setting the textures , culling and all other properties needed 
         // then we pass the MVP to the shader 
         // and draw it
+         
+        //M*eye, M->model matrix transformation, eye->where camera looks
+        //M*eye gives the camera position
         for (auto& opaqueCommand : opaqueCommands){
             opaqueCommand.material->setup();
+            glm::mat4 M_I = glm::inverse(opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("eye",glm::vec3(M* glm::vec4 ( glm::vec3(0,0,0),1)));
+            opaqueCommand.material->shader->set("M",opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("M_IT",M_I);
             opaqueCommand.material->shader->set("transform",VP*opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("light_count",(int)lightsCommands.size());
+            int i=0;
+            //printf((int)lightsCommands.size());
+            //printf("/////////////");
+            for (auto& lightCommand : lightsCommands){
+                //printf("in light");
+                std::string Ltype="lights["+std::to_string(i)+"].type";
+                if(lightCommand.lightType==LightType::DIRECTIONAL)
+                    opaqueCommand.material->shader->set(Ltype,1);
+                else if(lightCommand.lightType==LightType::POINT)
+                    opaqueCommand.material->shader->set(Ltype,2);
+                else if(lightCommand.lightType==LightType::SPOT)
+                    opaqueCommand.material->shader->set(Ltype,3);  
+
+                std::string Lposition="lights["+std::to_string(i)+"].position";
+                opaqueCommand.material->shader->set(Lposition,lightCommand.position);
+
+                std::string Ldirection="lights["+std::to_string(i)+"].direction";
+                opaqueCommand.material->shader->set(Ldirection,lightCommand.direction);  
+
+                std::string Ldiffuse="lights["+std::to_string(i)+"].diffuse";
+                opaqueCommand.material->shader->set(Ldiffuse,lightCommand.diffuse);
+
+                std::string Lspecular="lights["+std::to_string(i)+"].specular";
+                opaqueCommand.material->shader->set(Lspecular,lightCommand.specular); 
+
+                std::string Lattenuation="lights["+std::to_string(i)+"].attenuation";
+                opaqueCommand.material->shader->set(Lattenuation,lightCommand.attenuation);
+
+                std::string Lcone_angles="lights["+std::to_string(i)+"].cone_angles";
+                opaqueCommand.material->shader->set(Lcone_angles,lightCommand.cone_angles);
+
+                i++;
+            }
+            
             opaqueCommand.mesh->draw();
         }
     
