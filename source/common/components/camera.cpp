@@ -39,7 +39,7 @@ namespace our {
         glm::mat4 view=glm::lookAt(
             glm::vec3(M* glm::vec4 (glm::vec3(0,0,0), 1)),  //eye where i look
             glm::vec3(M* glm::vec4 ( glm::vec3(0,0,-1),1)),  //center of view (orgin)
-            glm::vec3(M* glm::vec4 ( glm::vec3(0,1,0),1))  //up direction of up
+            glm::vec3(M* glm::vec4 ( glm::vec3(0,1,0),0))  //up direction of up
         );
         return view;
     }
