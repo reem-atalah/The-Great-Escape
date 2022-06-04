@@ -35,7 +35,7 @@
                 "albedo": "assets/textures/maze.png",
                 "specular": "assets/textures/maze.png",
                 "ambient_occlusion": "assets/textures/maze.png",
-                "emissive":"assets/textures/maze.png",
+                "emissive":"assets/textures/black.jpg",
                 "roughness":"assets/textures/maze.png"
             },
             "meshes":{
@@ -129,7 +129,17 @@
                 ]
             },
             {
-                "position": [0, 0, 0],  //directional light has no position
+                "position": [0,0, 0],  //directional light has no position
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": "directional"
+
+                    } 
+                 ] 
+            },
+            {
+                "position": [1, 0, 0],  //directional light has no position
                 "components": [
                     {
                         "type": "Light",
