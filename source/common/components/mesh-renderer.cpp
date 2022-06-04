@@ -8,5 +8,10 @@ namespace our {
         // Notice how we just get a string from the json file and pass it to the AssetLoader to get us the actual asset
         mesh = AssetLoader<Mesh>::get(data["mesh"].get<std::string>());
         material = AssetLoader<Material>::get(data["material"].get<std::string>());
+
+        isBall =data.value("isBall", false);
+        isMaze =data.value("isMaze", false);
+
+
     }
 }
