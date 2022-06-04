@@ -141,9 +141,6 @@
                 "components": [
                     {
                         "type": "Camera",
-                        "eye": [4, 1, 5],
-                        "center": [0, 0, 0],
-                        "up": [0, 1, 0],
                         "fov": 90,
                         "near": 0.01,
                         "far": 1000
@@ -154,28 +151,29 @@
                 ],
                 "children": [
                     {
-                        "position": [0, -20, -30],
+                        "position": [0, 0, -20],
                         "scale": [0.1, 0.1, 0.1],
                         "components": [
                             {
                                 "type": "Mesh Renderer",
                                 "mesh": "ball",
-                                "material": "ball"
+                                "material": "ball",
+                                "isBall":true
                             }
                         ]
                     }
                 ]
             },
-
             {
-                "position": [0, -1, 0],
+                "position": [0, 0, 0],
                 // "rotation": [-90, 0, 0],
                 "scale": [1, 1, 1],
                 "components": [
                     {
                         "type": "Mesh Renderer",
                         "mesh": "maze",
-                        "material": "maze"
+                        "material": "maze",
+                        "isMaze":true
                     }
                 ]
             }
