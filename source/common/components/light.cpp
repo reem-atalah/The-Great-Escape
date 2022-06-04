@@ -5,7 +5,7 @@
 #include "../deserialize-utils.hpp"
 
 namespace our {
-    // Reads light parameters from the given json object
+    // Reads Light parameters from the given json object
     void LightComponent::deserialize(const nlohmann::json& data){
         if(!data.is_object()) return;
         std::string lightTypeStr = data.value("lightType", "directional");

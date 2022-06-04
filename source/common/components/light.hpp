@@ -28,7 +28,6 @@ namespace our {
 
         // Reads light parameters from the given json object
         void deserialize(const nlohmann::json& data) override;
-
     };
 
 }
