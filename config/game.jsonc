@@ -23,21 +23,22 @@
                 "textured":{
                     "vs":"assets/shaders/textured.vert",
                     "fs":"assets/shaders/textured.frag"
+                },
+                "lighted":{
+                    "vs":"assets/shaders/lighted.vert",
+                    "fs":"assets/shaders/lighted.frag"
                 }
             },
             "textures":{
-                "moon": "assets/textures/moon.jpg",
                 "maze": "assets/textures/maze.png",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png",
-                "ball": "assets/textures/ball.jpg"
-
+                "ball": "assets/textures/ball.jpg",
+                "albedo": "assets/textures/maze.png",
+                "specular": "assets/textures/maze.png",
+                "ambient_occlusion": "assets/textures/maze.png",
+                "emissive":"assets/textures/maze.png",
+                "roughness":"assets/textures/maze.png"
             },
             "meshes":{
-                "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
-                "plane": "assets/models/plane.obj",
                 "maze": "assets/models/maze.obj",
                 "sphere": "assets/models/sphere.obj",
                 "ball": "assets/models/ball.obj"
@@ -65,31 +66,9 @@
                     "texture": "ball",
                     "sampler": "pixelated"
                 },
-                "glass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        },
-                        "blending":{
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
-                    },
-                    "transparent": true,
-                    "tint": [1, 1, 1, 1],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
                 "maze":{
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lighted",
+                    "shader": "lighted",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -98,39 +77,12 @@
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "maze",
-                    "sampler": "default"
-                },
-                "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
-                    "sampler": "default"
-                },
-                "moon":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "moon",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "albedo" :"albedo",
+                    "roughness":"roughness",
+                    "specular":"specular",
+                    "emissive":"emissive",
+                    "ambient_occlusion":"ambient_occlusion"
                 }
             }
         },
@@ -166,7 +118,6 @@
             },
             {
                 "position": [0, 0, 0],
-                // "rotation": [-90, 0, 0],
                 "scale": [1, 1, 1],
                 "components": [
                     {
@@ -176,6 +127,17 @@
                         "isMaze":true
                     }
                 ]
+            },
+            {
+                "position": [0, 0, 0],  //directional light has no position
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": "directional"
+                        // "cone_angles":[10,100]
+
+                    } 
+                 ] 
             }
         ]
     }
