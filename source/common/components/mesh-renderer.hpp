@@ -13,6 +13,10 @@ namespace our {
         Mesh* mesh; // The mesh that should be drawn
         Material* material; // The material used to draw the mesh
 
+        bool isBall=false;
+        bool isMaze=false;
+
+
         // The ID of this component type is "Mesh Renderer"
         static std::string getID() { return "Mesh Renderer"; }
 

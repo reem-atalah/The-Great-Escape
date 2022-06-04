@@ -167,7 +167,7 @@ namespace our {
             }
 
             if(auto lightRenderer = entity->getComponent<LightComponent>(); lightRenderer){
-                // We construct a command from it
+                // We construct a command from LightCommand
                 LightCommand command;
                 command.localToWorld=lightRenderer->getOwner()->getLocalToWorldMatrix();
                 command.lightType = lightRenderer->lightType;
@@ -177,7 +177,7 @@ namespace our {
                 command.specular = lightRenderer->specular;
                 command.direction=glm::vec3(command.localToWorld * glm::vec4(-1, 0, 0, 1));
                 command.position= glm::vec3(command.localToWorld* glm::vec4 (glm::vec3(2,0,0), 1)); 
-
+                 // add the light to light command list
                 lightsCommands.push_back(command);
             }
         }
@@ -251,17 +251,22 @@ namespace our {
         //M*eye gives the camera position
         for (auto& opaqueCommand : opaqueCommands){
             opaqueCommand.material->setup();
-            glm::mat4 M_I = glm::inverse(opaqueCommand.localToWorld);
+            glm::mat4 M_I =glm::transpose(glm::inverse(opaqueCommand.localToWorld));
             opaqueCommand.material->shader->set("eye",glm::vec3(M* glm::vec4 ( glm::vec3(0,0,0),1)));
             opaqueCommand.material->shader->set("M",opaqueCommand.localToWorld);
             opaqueCommand.material->shader->set("M_IT",M_I);
             opaqueCommand.material->shader->set("transform",VP*opaqueCommand.localToWorld);
             opaqueCommand.material->shader->set("light_count",(int)lightsCommands.size());
+            //add the sky light
+            opaqueCommand.material->shader->set("sky.top",glm::vec3(0.3, 0.6, 1.0));
+            opaqueCommand.material->shader->set("sky.middle",glm::vec3(0.3, 0.3, 0.3));
+            opaqueCommand.material->shader->set("sky.bottom",glm::vec3(0.1, 0.1, 0.0));
+
             int i=0;
-            //printf((int)lightsCommands.size());
-            //printf("/////////////");
+            // llop over all lights
             for (auto& lightCommand : lightsCommands){
                 //printf("in light");
+                //set the type of the light
                 std::string Ltype="lights["+std::to_string(i)+"].type";
                 if(lightCommand.lightType==LightType::DIRECTIONAL)
                     opaqueCommand.material->shader->set(Ltype,1);

@@ -79,12 +79,12 @@ namespace our {
 
 
     void LitMaterial::setup() const {
-        //TODO: (Req 6) Write this function
+
 
         // Calling the setup of the parent to set the tint, the pipeline state and the shader to be used with drawing the object
         Material::setup();
 
-        // ??? Which texture unit to bind on ???
+        //bind albedo texture
         int textUnitNumber = 0;
         GLenum texUnitEnum = GL_TEXTURE0 + textUnitNumber;
         glActiveTexture(texUnitEnum);
@@ -92,7 +92,7 @@ namespace our {
         sampler->bind(textUnitNumber);
         shader->set("material.albedo", textUnitNumber);
 
-
+        //bind specular texture
         textUnitNumber = 1;
         texUnitEnum = GL_TEXTURE0 + textUnitNumber;
         glActiveTexture(texUnitEnum);
@@ -100,6 +100,7 @@ namespace our {
         sampler->bind(textUnitNumber);
         shader->set("material.specular", textUnitNumber);
 
+        //bind ambient_occlusion texture
         textUnitNumber = 2;
         texUnitEnum = GL_TEXTURE0 + textUnitNumber;
         glActiveTexture(texUnitEnum);
@@ -107,6 +108,7 @@ namespace our {
         sampler->bind(textUnitNumber);
         shader->set("material.ambient_occlusion", textUnitNumber);
 
+        //bind roughness texture
         textUnitNumber = 3;
         texUnitEnum = GL_TEXTURE0 + textUnitNumber;
         glActiveTexture(texUnitEnum);
@@ -114,6 +116,7 @@ namespace our {
         sampler->bind(textUnitNumber);
         shader->set("material.roughness", textUnitNumber);
 
+        //bind emissive texture
         textUnitNumber = 4;
         texUnitEnum = GL_TEXTURE0 + textUnitNumber;
         glActiveTexture(texUnitEnum);
@@ -123,16 +126,17 @@ namespace our {
         
     }
 
-        void LitMaterial::deserialize(const nlohmann::json& data){
-        Material::deserialize(data);
-        if(!data.is_object()) return;
-        albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
-        specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
-        ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
-        roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
-        emissive = AssetLoader<Texture2D>::get(data.value("emissive", ""));
+    // This function read the LitMaterial data from a json object
+    void LitMaterial::deserialize(const nlohmann::json& data){
+    Material::deserialize(data);
+    if(!data.is_object()) return;
+    albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+    specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
+    ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
+    roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+    emissive = AssetLoader<Texture2D>::get(data.value("emissive", ""));
 
-        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
-        }
+    sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+    }
 
 }

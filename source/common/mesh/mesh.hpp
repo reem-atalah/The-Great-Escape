@@ -16,9 +16,9 @@ namespace our {
         unsigned int VBO, EBO;
         unsigned int VAO;
         // We need to remember the number of elements that will be draw by glDrawElements 
-        GLsizei elementCount;
+        GLsizei elementCount;        
     public:
-
+        std::vector<Vertex> mesh_vertices;
         // The constructor takes two vectors:
         // - vertices which contain the vertex data.
         // - elements which contain the indices of the vertices out of which each rectangle will be constructed.
@@ -26,7 +26,7 @@ namespace our {
         // a vertex buffer to store the vertex data on the VRAM,
         // an element buffer to store the element data on the VRAM,
         // a vertex array object to define how to read the vertex & element buffer during rendering 
-        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements)
+        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements): mesh_vertices(vertices)
         {
             //TODO: (Req 1) Write this function
             // remember to store the number of elements in "elementCount" since you will need it for drawing
