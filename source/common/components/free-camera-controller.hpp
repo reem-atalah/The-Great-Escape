@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp> 
 
-namespace our {
+namespace our { 
 
     // This component denotes that the FreeCameraControllerSystem will move the owning entity using user inputs.
     // It will also control the camera field of view accroding to the scrolling of the mouse wheel

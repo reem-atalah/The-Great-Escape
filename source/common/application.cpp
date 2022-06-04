@@ -249,6 +249,18 @@ int our::Application::run(int run_for_frames) {
 
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
+        if(changedState == 1)
+        {
+            // ImGui::SetNextWindowSize((ImVec2(300,300)));
+            //
+            ImGui::Begin("Hi", false  , ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+            if(ImGui::Button("Lead me to the out, Please !", ImVec2(210,50)))
+            {
+                our::Application::changeState("main");
+            }
+            ImGui::End();
+        }
+
         // If ImGui is using the mouse or keyboard, then we don't want the captured events to affect our keyboard and mouse objects.
         // For example, if you're focusing on an input and writing "W", the keyboard object shouldn't record this event.
         keyboard.setEnabled(!io.WantCaptureKeyboard, window);

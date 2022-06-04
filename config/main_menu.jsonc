@@ -1,0 +1,146 @@
+{
+    "start-scene": "menu",
+    "window":
+    {
+        "title":"Main Menu Window",
+        "size":{
+            "width":1200,
+            "height":700
+        },
+        "fullscreen": false
+    },
+    "scene": {
+        "renderer": {
+            // "sky": "assets/textures/maze_background.jpg"
+            "postprocess": "assets/shaders/postprocess/vignette.frag"
+
+        },
+        "assets":{
+            "shaders":{
+                "tinted":{
+                    "vs":"assets/shaders/tinted.vert",
+                    "fs":"assets/shaders/tinted.frag"
+                },
+                "textured":{
+                    "vs":"assets/shaders/textured.vert",
+                    "fs":"assets/shaders/textured.frag"
+                }
+            },
+            "textures":{
+                "grass": "assets/textures/maze_background.jpg",
+                "ball": "assets/textures/ball.jpg",
+                "speech": "assets/textures/blue.png"
+            },
+            "meshes":{
+                "plane": "assets/models/plane.obj",
+                "sphere": "assets/models/sphere.obj", 
+                "speech": "assets/models/bevelled_speech_bubble.obj"
+            },
+            "samplers":{
+                "default":{},
+                "pixelated":{
+                    "MAG_FILTER": "GL_NEAREST"
+                }
+            },
+            "materials":{
+                "grass":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "grass",
+                    "sampler": "default"
+                },
+                "ball":{//moon
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "ball",//moon
+                    "sampler": "default"
+                },
+                "speech":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "speech",
+                    "sampler": "default"
+                }
+            }
+        },
+        "world":[
+            {
+                "position": [0,0,20],
+                "components": [
+                    {
+                        "type": "Camera"
+                    }
+                    
+                ]
+            },
+            {
+                "position": [0, -1, 0],
+                "rotation": [0, 0, 0],
+                "scale": [35, 25, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "grass"
+                    }
+                ]
+            },
+            {
+                // "position": [-18, -5, 0], //ball
+                "position": [-14, -9, 0], //human
+                "rotation": [0,0,0],
+                "scale": [40,40,40],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "speech",
+                        "material": "speech"
+                    }
+                ]
+            }
+            // {
+            //     "position": [-14, -13, 0],
+            //     "rotation": [45, 0, 0],
+            //     "scale": [5,5,5],
+            //     "components": [
+            //         {
+            //             "type": "Mesh Renderer",
+            //             "mesh": "sphere",
+            //             "material": "ball"
+            //         },
+            //         {
+            //             "type": "Movement",
+            //             "angularVelocity": [0, 30, 0]
+            //         }
+            //     ]
+            // }
+        ]
+    }
+}

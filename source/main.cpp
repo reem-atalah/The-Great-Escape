@@ -6,6 +6,7 @@
 #include <application.hpp>
 
 #include "states/play-state.hpp"
+#include "states/menu-state.hpp"
 #include "states/mesh-test-state.hpp"
 #include "states/transform-test-state.hpp"
 #include "states/pipeline-test-state.hpp"
@@ -40,6 +41,7 @@ int main(int argc, char** argv) {
     our::Application app(app_config);
     
     // Register all the states of the project in the application
+    app.registerState<Menustate>("menu");
     app.registerState<Playstate>("main");
     app.registerState<MeshTestState>("mesh-test");
     app.registerState<TransformTestState>("transform-test");
@@ -55,6 +57,6 @@ int main(int argc, char** argv) {
     }
 
     // Finally run the application
-    // Here, the application loop will run till the terminatio condition is statisfied
+    // Here, the application loop will run till the termination condition is statisfied
     return app.run(run_for_frames);
 }
