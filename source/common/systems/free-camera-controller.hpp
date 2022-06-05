@@ -195,7 +195,8 @@ namespace our
                 }
             }
 
-            
+             // Getting the max height of the maze that you shouldnot exceed so not to fly
+     
             float min_x, max_x, min_y, max_y, min_z, max_z;
             glm::vec3 mazeVerticies_global = mazeModelMatrix * glm::vec4(mazeVerticies_local[0].position, 1.0f);
             min_x = max_x = mazeVerticies_global[0];
@@ -212,21 +213,22 @@ namespace our
                 if (mazeVerticies_global[2] < min_z) min_z = mazeVerticies_global[2];
                 if (mazeVerticies_global[2] > max_z) max_z = mazeVerticies_global[2];
             }
+           
+            glm::vec4 cameraGlobal = matrix*glm::vec4(position[0],position[1],position[2],0.0f);  
+         
+            // 5- Check condition of collision  and height of maze
+            // if I didnot colloide and still the y(height) is below the maze height 
+            // then move
+            if(!colloided) {
+            // position=newPosition;
+                    if(app->getKeyboard().isPressed(GLFW_KEY_W)  && cameraGlobal[2] < max_z) position += front * (deltaTime * current_sensitivity.z);
+                    if(app->getKeyboard().isPressed(GLFW_KEY_S)  && cameraGlobal[2] > min_z) position -= front * (deltaTime * current_sensitivity.z);
+                    if(app->getKeyboard().isPressed(GLFW_KEY_D)  && cameraGlobal[0]< max_x) position += right * (deltaTime * current_sensitivity.x);
+                    if(app->getKeyboard().isPressed(GLFW_KEY_A ) && cameraGlobal[0]> min_x) position -= right * (deltaTime * current_sensitivity.x);
+                    if(app->getKeyboard().isPressed(GLFW_KEY_Q)  && cameraGlobal[1]< max_y) position += up    * (deltaTime * current_sensitivity.y);
+                    if(app->getKeyboard().isPressed(GLFW_KEY_E)  && cameraGlobal[1]> min_y) position -= up    * (deltaTime * current_sensitivity.y);
+            }
 
-            std::cout<<max_x<<std::endl;
-            std::cout<<min_x<<std::endl;
-            std::cout<<max_y<<std::endl;
-            std::cout<<min_y<<std::endl;
-            std::cout<<max_z<<std::endl;
-            std::cout<<min_z<<std::endl;
-            std::cout<<max_x-min_x<<std::endl;
-            std::cout<<max_y-min_y<<std::endl;
-            std::cout<<max_z-min_z<<std::endl;
-            std::cout<<"---------------------------"<<std::endl;
-
-
-            // 5- Check condition of collision
-            if(!colloided) {position=newPosition;}
             if(endGame){
                 app->setWinning(endGame);
             }           

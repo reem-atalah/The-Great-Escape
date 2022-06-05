@@ -37,8 +37,9 @@
                 "ambient_occlusion": "assets/textures/white.jpg",
                 "emissive":"assets/textures/black.jpg",
                 "roughness":"assets/textures/black.jpg",
-                "trophy_albedo":"assets/textures/trophy_albedo.png",
-                "trophy_metalness": "assets/textures/trophy_metalness.png"
+                "trophy": "assets/textures/trophy.jpeg",
+                "trophy_albedo":"assets/textures/albedo.jpg",
+                "trophy_specular": "assets/textures/specular.jpg"
             },
             "meshes":{
                 "maze": "assets/models/maze.obj",
@@ -100,10 +101,10 @@
                     },
                     "sampler": "default",
                     "albedo" :"trophy_albedo",
-                    "roughness":"roughness",
-                    "specular":"specular",
-                    "emissive":"trophy_metalness",
-                    "ambient_occlusion":"ambient_occlusion"
+                    "roughness":"trophy_albedo",
+                    "specular":"trophy_albedo",
+                    "emissive":"trophy_albedo",
+                    "ambient_occlusion":"trophy_albedo"
 
                 }
             }
@@ -114,6 +115,7 @@
                 // x : right and left
                 // y : up and down 
                 // z : in  and out of screen
+
                 "position": [-30, 60, 0],
                 "rotation": [0, -120, 0],
                 "components": [
@@ -174,8 +176,7 @@
                  ] 
             },
             {
-                // "position": [297, 0, 303],
-                "position": [-30, 60, 0],
+                "position": [0, 30, 303],
                 "scale": [10, 10, 10],
                 "components": [
                     {
