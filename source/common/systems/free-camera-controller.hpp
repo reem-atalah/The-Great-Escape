@@ -18,6 +18,9 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/intersect.hpp>
 
+#include <iostream>
+
+
 namespace our
 {
 
@@ -39,6 +42,7 @@ namespace our
         void update(World* world, float deltaTime) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
+            
             CameraComponent* camera = nullptr;
             FreeCameraControllerComponent *controller = nullptr;
             for(auto entity : world->getEntities()){
@@ -55,6 +59,7 @@ namespace our
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
                 app->getMouse().lockMouse(app->getWindow());
                 mouse_locked = true;
+                
             // If the left mouse button is released, we unlock and unhide the mouse.
             } else if(!app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && mouse_locked) {
                 app->getMouse().unlockMouse(app->getWindow());
@@ -153,8 +158,78 @@ namespace our
                     }                    
                 }
             }
+
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // GAME END LOGIC:
+
+            // get trophy verticies and elemnets
+            MeshRendererComponent * trophyComponent;
+            for(auto entity : world->getEntities()){
+
+                trophyComponent = entity->getComponent<MeshRendererComponent>();
+                if(trophyComponent && trophyComponent->isTrophy) break;
+            }
+
+            if(!trophyComponent) return;
+
+            std::vector<Vertex> trophyVerticies_local=trophyComponent->mesh->mesh_vertices;
+            std::vector<GLuint> trophyElements =trophyComponent->mesh->mesh_elements;
+            glm::mat4 trophyModelMatrix = trophyComponent->getOwner()->getLocalToWorldMatrix();
+            
+            //  Check if colloided with the trophy 
+            bool endGame=false;
+
+            element_count = (trophyElements.size() / 3) * 3;
+            for(size_t element = 0; element < element_count;){
+                glm::vec3 v0 = trophyModelMatrix * glm::vec4(trophyVerticies_local[trophyElements[element++]].position, 1.0f);
+                glm::vec3 v1 = trophyModelMatrix * glm::vec4(trophyVerticies_local[trophyElements[element++]].position, 1.0f);
+                glm::vec3 v2 = trophyModelMatrix * glm::vec4(trophyVerticies_local[trophyElements[element++]].position, 1.0f);
+                glm::vec2 barycentric_coords; float triangle_hit_distance;
+
+                if(glm::intersectRayTriangle(position, movementDirection, v0, v1, v2, barycentric_coords, triangle_hit_distance)){
+                    if(triangle_hit_distance>0 && triangle_hit_distance<= glm::distance(position,newPosition)){
+                            endGame=true;
+                            break;
+                    }                    
+                }
+            }
+
+            
+            float min_x, max_x, min_y, max_y, min_z, max_z;
+            glm::vec3 mazeVerticies_global = mazeModelMatrix * glm::vec4(mazeVerticies_local[0].position, 1.0f);
+            min_x = max_x = mazeVerticies_global[0];
+            min_y = max_y = mazeVerticies_global[1];
+            min_z = max_z = mazeVerticies_global[2];
+
+            for (unsigned int i = 0; i < mazeVerticies_local.size(); i++) {
+
+                mazeVerticies_global = mazeModelMatrix * glm::vec4(mazeVerticies_local[i].position, 1.0f);
+                if (mazeVerticies_global[0] < min_x) min_x = mazeVerticies_global[0];
+                if (mazeVerticies_global[0] > max_x) max_x = mazeVerticies_global[0];
+                if (mazeVerticies_global[1] < min_y) min_y = mazeVerticies_global[1];
+                if (mazeVerticies_global[1] > max_y) max_y = mazeVerticies_global[1];
+                if (mazeVerticies_global[2] < min_z) min_z = mazeVerticies_global[2];
+                if (mazeVerticies_global[2] > max_z) max_z = mazeVerticies_global[2];
+            }
+
+            std::cout<<max_x<<std::endl;
+            std::cout<<min_x<<std::endl;
+            std::cout<<max_y<<std::endl;
+            std::cout<<min_y<<std::endl;
+            std::cout<<max_z<<std::endl;
+            std::cout<<min_z<<std::endl;
+            std::cout<<max_x-min_x<<std::endl;
+            std::cout<<max_y-min_y<<std::endl;
+            std::cout<<max_z-min_z<<std::endl;
+            std::cout<<"---------------------------"<<std::endl;
+
+
             // 5- Check condition of collision
             if(!colloided) {position=newPosition;}
+            if(endGame){
+                app->setWinning(endGame);
+            }           
 
   
         }

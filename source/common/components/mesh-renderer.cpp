@@ -11,7 +11,7 @@ namespace our {
 
         isBall =data.value("isBall", false);
         isMaze =data.value("isMaze", false);
-
+        isTrophy=data.value("isTrophy", false);
 
     }
 }
