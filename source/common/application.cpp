@@ -1,5 +1,4 @@
 #include "application.hpp"
-#include "../states/menu-state.hpp"
 
 // write in termianl
 #define GLM_ENABLE_EXPERIMENTAL
@@ -254,7 +253,7 @@ int our::Application::run(int run_for_frames) {
 
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
-        // if(currentState == Menustate)
+        if(changedState == "menu")
         {
             // ImGui::SetNextWindowSize((ImVec2(300,300)));
             //
