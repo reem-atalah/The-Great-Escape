@@ -66,6 +66,7 @@ namespace our {
         const int TOTAL_GAME_TIME = 5;          // Time for the game, after that you lose
         int startGameTime = 0;                  //The time when the game starts in minutes
         int traceTime = 0;                       // To update the time, to know if we reached TOTAL_GAME_TIME or not
+        bool isWin = false;                     // Boolean to check if he win to to go to winning menu
         
         // Virtual functions to be overrode and change the default behaviour of the application
         // according to the example needs.
@@ -82,6 +83,12 @@ namespace our {
 
         // This is the main class function that run the whole application (Initialize, Game loop, House cleaning).
         int run(int run_for_frames = 0);
+
+        // Set the value of winning
+        void setWinning(bool win){
+            isWin = win;
+        }
+
 
         // Register a state for use by the application
         // The state is uniquely identified by its name

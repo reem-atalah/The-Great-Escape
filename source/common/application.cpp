@@ -291,6 +291,12 @@ int our::Application::run(int run_for_frames) {
                 startGameTime = 0;
                 our::Application::changeState("lose");
             }
+
+            if(isWin)
+            {
+                startGameTime = 0;
+                our::Application::changeState("win");
+            }
         }
 
         if(changedState == "lose")
