@@ -31,7 +31,6 @@
             },
             "textures":{
                 "maze": "assets/textures/maze.png",
-                "ball": "assets/textures/ball.jpg",
                 "albedo": "assets/textures/maze.png",
                 "specular": "assets/textures/white.jpg",
                 "ambient_occlusion": "assets/textures/white.jpg",
@@ -44,7 +43,6 @@
             "meshes":{
                 "maze": "assets/models/maze.obj",
                 "sphere": "assets/models/sphere.obj",
-                "ball": "assets/models/ball.obj",
                 "trophy": "assets/models/trophy.obj"
 
             },
@@ -55,21 +53,6 @@
                 }
             },
             "materials":{
-                "ball":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "ball",
-                    "sampler": "pixelated"
-                },
                 "maze":{
                     "type": "lighted",
                     "shader": "lighted",
