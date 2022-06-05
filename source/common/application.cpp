@@ -256,7 +256,7 @@ int our::Application::run(int run_for_frames) {
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
         //  
-        ImGui::Begin("Hi menus!", false, ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove );
+        ImGui::Begin("Hi menus!", false ,ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove );
 
         // Draw start button in main menu
         if(changedState == "menu" )
@@ -285,14 +285,6 @@ int our::Application::run(int run_for_frames) {
             ImGui::PushFont(font_words);
             ImGui::Text(" \n Ooops ! \n\n Game Over ! \n\n I'm stuck now :(");
 
-            // auto time = std::time(nullptr);
-            // auto localtime = std::localtime(&time);
-            
-            // if(ImGui::Button("You can try again :)", ImVec2(210,50)))
-            // {
-            //     startGameTime = localtime->tm_min;
-            //     our::Application::changeState("game");
-            // }
             ImGui::PopFont();
         }
 
@@ -301,14 +293,6 @@ int our::Application::run(int run_for_frames) {
             ImGui::PushFont(font_numbers);
             ImGui::Text(" You win! \n Finally I'm out \n Great job! <3");
 
-            // auto time = std::time(nullptr);
-            // auto localtime = std::localtime(&time);
-            
-            // if(ImGui::Button("Want to try again ?", ImVec2(210,50)))
-            // {
-            //     startGameTime = localtime->tm_min;
-            //     our::Application::changeState("game");
-            // }
             ImGui::PopFont();
         }
 
