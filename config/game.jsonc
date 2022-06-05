@@ -2,7 +2,7 @@
     "start-scene": "game",
     "window":
     {
-        "title":"Default Game Window",
+        "title":"Game Window",
         "size":{
             "width":1280,
             "height":720
