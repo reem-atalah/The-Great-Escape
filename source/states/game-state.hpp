@@ -8,8 +8,9 @@
 #include <systems/movement.hpp>
 #include <asset-loader.hpp>
 
+
 // This state shows how to use the ECS framework and deserialization.
-class Playstate: public our::State {
+class Gamestate: public our::State {
 
     our::World world;
     our::ForwardRenderer renderer;
@@ -17,8 +18,24 @@ class Playstate: public our::State {
     our::MovementSystem movementSystem;
 
     void onInitialize() override {
+        // get the path of json file to apply the play state
+        std::string config_path = "config/game.jsonc";
+
+        // Open the config file and exit if failed
+        std::ifstream file_in(config_path);
+        if (!file_in)
+        {
+            std::cerr << "Couldn't open file: " << config_path << std::endl;
+            return;
+        }
+
+        // Read the file into a json object then close the file
+        nlohmann::json game_config = nlohmann::json::parse(file_in, nullptr, true, true);
+        file_in.close();
         // First of all, we get the scene configuration from the app config
-        auto& config = getApp()->getConfig()["scene"];
+        auto &config = game_config["scene"];
+        // auto& config = getApp()->getConfig()["scene"];
+
         // If we have assets in the scene config, we deserialize them
         if(config.contains("assets")){
             our::deserializeAllAssets(config["assets"]);
