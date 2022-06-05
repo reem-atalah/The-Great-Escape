@@ -33,10 +33,10 @@
                 "maze": "assets/textures/maze.png",
                 "ball": "assets/textures/ball.jpg",
                 "albedo": "assets/textures/maze.png",
-                "specular": "assets/textures/maze.png",
-                "ambient_occlusion": "assets/textures/maze.png",
+                "specular": "assets/textures/white.jpg",
+                "ambient_occlusion": "assets/textures/white.jpg",
                 "emissive":"assets/textures/black.jpg",
-                "roughness":"assets/textures/maze.png"
+                "roughness":"assets/textures/black.jpg"
             },
             "meshes":{
                 "maze": "assets/models/maze.obj",
@@ -104,6 +104,20 @@
                     {
                         "type": "Free Camera Controller"
                     }
+                ],
+                "children": [
+                    {
+                        "position": [0, 0, 0],
+                        "components": [
+                            {
+                                "type": "Light",
+                                "lightType": "spot",
+                                "diffuse":[ 0.7, 0.2, 0.1],
+                                "specular":[0.7, 0.2, 0.1],
+                                "cone_angles":[0,360]
+                            }
+                        ]
+                    }
                 ]
             },
             {
@@ -124,17 +138,6 @@
                     {
                         "type": "Light",
                         "lightType": "directional"
-
-                    } 
-                 ] 
-            },
-            {
-                "position": [1, 0, 0],  //directional light has no position
-                "components": [
-                    {
-                        "type": "Light",
-                        "lightType": "directional"
-                        // "cone_angles":[10,100]
 
                     } 
                  ] 
