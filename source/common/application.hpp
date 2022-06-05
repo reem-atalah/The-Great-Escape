@@ -62,8 +62,10 @@ namespace our {
         std::unordered_map<std::string, State*> states;   // This will store all the states that the application can run
         State * currentState = nullptr;         // This will store the current scene that is being run
         State * nextState = nullptr;            // If it is requested to go to another scene, this will contain a pointer to that scene
-        std::string changedState = "";
-
+        std::string changedState = "";          //Has the current state string name
+        const int TOTAL_GAME_TIME = 5;          // Time for the game, after that you lose
+        int startGameTime = 0;                  //The time when the game starts in minutes
+        int traceTime = 0;                       // To update the time, to know if we reached TOTAL_GAME_TIME or not
         
         // Virtual functions to be overrode and change the default behaviour of the application
         // according to the example needs.

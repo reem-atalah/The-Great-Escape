@@ -10,7 +10,7 @@
 
 
 // This state shows how to use the ECS framework and deserialization.
-class Gamestate: public our::State {
+class LoseGamestate: public our::State {
 
     our::World world;
     our::ForwardRenderer renderer;
@@ -19,7 +19,7 @@ class Gamestate: public our::State {
 
     void onInitialize() override {
         // get the path of json file to apply the play state
-        std::string config_path = "config/game/game.jsonc";
+        std::string config_path = "config/game/lose-game.jsonc";
 
         // Open the config file and exit if failed
         std::ifstream file_in(config_path);

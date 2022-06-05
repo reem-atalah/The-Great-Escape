@@ -253,17 +253,75 @@ int our::Application::run(int run_for_frames) {
 
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
-        if(changedState == "menu")
+        ImGui::Begin("Hi", false  , ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+        // Draw start button in main menu
+        if(changedState == "menu" )
         {
-            // ImGui::SetNextWindowSize((ImVec2(300,300)));
-            //
-            ImGui::Begin("Hi", false  , ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+            auto time = std::time(nullptr);
+            auto localtime = std::localtime(&time);
+            // std::cout<<localtime->tm_min;
+            
             if(ImGui::Button("Lead me to the out, Please !", ImVec2(210,50)))
             {
+                startGameTime = localtime->tm_min;
                 our::Application::changeState("game");
             }
-            ImGui::End();
+            
         }
+
+        // In game state, check if time has finished
+        if(changedState == "game") 
+        {
+            auto time = std::time(nullptr);
+            auto localtime = std::localtime(&time);
+            
+            // Update time 
+            if(localtime->tm_min != startGameTime) 
+            {
+                traceTime++;
+                startGameTime = localtime->tm_min;
+            }
+            // Display time
+            std::string tmp = std::to_string(TOTAL_GAME_TIME - traceTime);
+            ImGui::Text(tmp.c_str());
+            
+            if(traceTime == TOTAL_GAME_TIME)
+            {
+                startGameTime = 0;
+                our::Application::changeState("lose");
+            }
+        }
+
+        if(changedState == "lose")
+        {
+            ImGui::Text("Game Over !");
+
+            auto time = std::time(nullptr);
+            auto localtime = std::localtime(&time);
+            
+            if(ImGui::Button("You can try again :)", ImVec2(210,50)))
+            {
+                startGameTime = localtime->tm_min;
+                our::Application::changeState("game");
+            }
+        }
+
+        if(changedState == "win")
+        {
+            ImGui::Text("You win ! Great job !");
+
+            auto time = std::time(nullptr);
+            auto localtime = std::localtime(&time);
+            
+            if(ImGui::Button("Want to try again ?", ImVec2(210,50)))
+            {
+                startGameTime = localtime->tm_min;
+                our::Application::changeState("game");
+            }
+        }
+
+        ImGui::End();
 
         // If ImGui is using the mouse or keyboard, then we don't want the captured events to affect our keyboard and mouse objects.
         // For example, if you're focusing on an input and writing "W", the keyboard object shouldn't record this event.
