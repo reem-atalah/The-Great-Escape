@@ -36,12 +36,15 @@
                 "specular": "assets/textures/white.jpg",
                 "ambient_occlusion": "assets/textures/white.jpg",
                 "emissive":"assets/textures/black.jpg",
-                "roughness":"assets/textures/black.jpg"
+                "roughness":"assets/textures/black.jpg",
+                "trophy_albedo":"assets/textures/trophy_albedo.png",
+                "trophy_metalness": "assets/textures/trophy_metalness.png"
             },
             "meshes":{
                 "maze": "assets/models/maze.obj",
                 "sphere": "assets/models/sphere.obj",
-                "ball": "assets/models/ball.obj"
+                "ball": "assets/models/ball.obj",
+                "trophy": "assets/models/trophy.obj"
 
             },
             "samplers":{
@@ -83,6 +86,25 @@
                     "specular":"specular",
                     "emissive":"emissive",
                     "ambient_occlusion":"ambient_occlusion"
+                },
+                "trophy":{
+                    "type": "lighted",
+                    "shader": "lighted",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "sampler": "default",
+                    "albedo" :"trophy_albedo",
+                    "roughness":"roughness",
+                    "specular":"specular",
+                    "emissive":"trophy_metalness",
+                    "ambient_occlusion":"ambient_occlusion"
+
                 }
             }
         },
@@ -147,6 +169,20 @@
                     {
                         "type": "Light",
                         "lightType": "directional"
+
+                    } 
+                 ] 
+            },
+            {
+                // "position": [297, 0, 303],
+                "position": [-30, 60, 0],
+                "scale": [10, 10, 10],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "trophy",
+                        "material": "trophy",
+                        "isTrophy":true
 
                     } 
                  ] 

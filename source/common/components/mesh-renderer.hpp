@@ -15,6 +15,7 @@ namespace our {
 
         bool isBall=false;
         bool isMaze=false;
+        bool isTrophy=false;
 
 
         // The ID of this component type is "Mesh Renderer"

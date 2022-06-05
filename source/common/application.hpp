@@ -89,7 +89,6 @@ namespace our {
             isWin = win;
         }
 
-
         // Register a state for use by the application
         // The state is uniquely identified by its name
         // If the name is already used, the old name owner is deleted and the new state takes its place
