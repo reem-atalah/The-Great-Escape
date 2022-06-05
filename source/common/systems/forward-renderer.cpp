@@ -176,7 +176,7 @@ namespace our {
                 command.diffuse = lightRenderer->diffuse;
                 command.specular = lightRenderer->specular;
                 command.direction=glm::vec3(command.localToWorld * glm::vec4(-1, 0, 0, 1));
-                command.position= glm::vec3(command.localToWorld* glm::vec4 (glm::vec3(2,0,0), 1)); 
+                command.position= glm::vec3(command.localToWorld* glm::vec4 (glm::vec3(0,0,0), 1)); 
                  // add the light to light command list
                 lightsCommands.push_back(command);
             }
