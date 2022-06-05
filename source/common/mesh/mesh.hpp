@@ -19,6 +19,8 @@ namespace our {
         GLsizei elementCount;        
     public:
         std::vector<Vertex> mesh_vertices;
+        std::vector<GLuint> mesh_elements;
+
         // The constructor takes two vectors:
         // - vertices which contain the vertex data.
         // - elements which contain the indices of the vertices out of which each rectangle will be constructed.
@@ -28,6 +30,8 @@ namespace our {
         // a vertex array object to define how to read the vertex & element buffer during rendering 
         Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements): mesh_vertices(vertices)
         {
+
+            mesh_elements=elements;
             //TODO: (Req 1) Write this function
             // remember to store the number of elements in "elementCount" since you will need it for drawing
             // For the attribute locations, use the constants defined above: ATTRIB_LOC_POSITION, ATTRIB_LOC_COLOR, etc

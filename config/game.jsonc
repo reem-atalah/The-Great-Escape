@@ -88,7 +88,11 @@
         },
         "world":[
             {
-                "position": [-40, 60, 0],
+                // x , y ,z
+                // x : right and left
+                // y : up and down 
+                // z : in  and out of screen
+                "position": [-30, 60, 0],
                 "rotation": [0, -120, 0],
                 "components": [
                     {
@@ -99,20 +103,6 @@
                     },
                     {
                         "type": "Free Camera Controller"
-                    }
-                ],
-                "children": [
-                    {
-                        "position": [0, 0, -20],
-                        "scale": [0.1, 0.1, 0.1],
-                        "components": [
-                            {
-                                "type": "Mesh Renderer",
-                                "mesh": "ball",
-                                "material": "ball",
-                                "isBall":true
-                            }
-                        ]
                     }
                 ]
             },

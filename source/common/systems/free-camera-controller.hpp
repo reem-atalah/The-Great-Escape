@@ -16,6 +16,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/intersect.hpp>
 
 namespace our
 {
@@ -33,27 +34,7 @@ namespace our
             this->app = app;
         }
 
-        float euclidianDistance(glm::vec3 vec1,glm::vec3 vec2){
-            glm::vec3 diff = vec1-vec2;
-            return glm::sqrt(glm::dot(diff,diff));
-        }
-
-        bool causeCollision(glm::vec3 newBallPositionCenter ,float ballRadius, std::vector<Vertex> mazeVertices, glm::mat4 mazeModelMatrix){
-              
-            for (unsigned int index=0; index< mazeVertices.size() ; index++ ){
-
-                glm::vec4 mazeVertexWorldV4=mazeModelMatrix*glm::vec4(mazeVertices[index].position,1);
-                glm::vec3 mazeVertexWorld (mazeVertexWorldV4[0],mazeVertexWorldV4[1],mazeVertexWorldV4[2]);
-
-                float dis =euclidianDistance(newBallPositionCenter,mazeVertexWorld);
-                if(dis<=ballRadius) return true;
-               
-            }
-
-            return false;
-        }
-        
-
+    
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
         void update(World* world, float deltaTime) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
@@ -125,7 +106,7 @@ namespace our
 
 
             // To Detect Collision
-            // 1- Get verticies of Maze in world space
+            // 1- Get verticies  & elements of Maze in world space
             MeshRendererComponent * mazeComponent;
             for(auto entity : world->getEntities()){
 
@@ -136,66 +117,44 @@ namespace our
             if(!mazeComponent) return;
 
             std::vector<Vertex> mazeVerticies_local=mazeComponent->mesh->mesh_vertices;
+            std::vector<GLuint> mazeElements =mazeComponent->mesh->mesh_elements;
             glm::mat4 mazeModelMatrix=mazeComponent->getOwner()->getLocalToWorldMatrix();
 
-            // 2- Get radius of the ball in the world space :
-                // 2.1- Get center of Ball "old center" in world space
-                // 2.2- Get any vertex of Ball in world space
-                // 2.3- Get Euclidian Distance between the 2 points
+            // 2- Save old camera position in  World Space
+            glm::vec3 newPosition=position; 
 
-            MeshRendererComponent * ballComponent;
-            for(auto entity : world->getEntities()){
-
-                ballComponent = entity->getComponent<MeshRendererComponent>();
-                if(ballComponent && ballComponent->isBall) break;
-            }
-
-            if(!ballComponent) return;
-            std::vector<Vertex> ballVerticies =ballComponent->mesh->mesh_vertices;
-            glm::mat4 ballModelMatrix = ballComponent->getOwner()->getLocalToWorldMatrix();
-            glm::vec3 ballCenterLocal (0,0,0);  //error possibility  code wise & doubt of *by Mcamera or not 
-
-            glm::vec4 ballCenterWorldVec4 = ballModelMatrix* glm::vec4(ballCenterLocal,1);
-            glm::vec3 ballCenterWorld (ballCenterWorldVec4[0],ballCenterWorldVec4[1],ballCenterWorldVec4[2]);
-
-            glm::vec4 ballVertexWorldVec4 = ballModelMatrix* glm::vec4(ballVerticies[0].position,1);
-            glm::vec3 ballVertexWorld (ballVertexWorldVec4[0],ballVertexWorldVec4[1],ballVertexWorldVec4[2]);
-
-            float ballRadius = euclidianDistance(ballCenterWorld,ballVertexWorld);
-
-            // 3- Get center of ball in the world space "new center" ( If the ball was to move in this new direction) 
-
-            if(app->getKeyboard().isPressed(GLFW_KEY_W)) position += front * (deltaTime * current_sensitivity.z);
-            if(app->getKeyboard().isPressed(GLFW_KEY_S)) position -= front * (deltaTime * current_sensitivity.z);
-            if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up    * (deltaTime * current_sensitivity.y);
-            if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up    * (deltaTime * current_sensitivity.y);
-
-            glm::mat4 newBallModelMatrix = ballComponent->getOwner()->getLocalToWorldMatrix();
-            glm::vec3 newBallCenterLocal (0,0,0);  //Should be same as old.. error possibility  code wise & doubt of *by Mcamera or not 
-
-            glm::vec4 newBallCenterWorldVec4 = newBallModelMatrix* glm::vec4(newBallCenterLocal,1);
-            glm::vec3 newBallCenterWorld (newBallCenterWorldVec4[0],newBallCenterWorldVec4[1],newBallCenterWorldVec4[2]);
-        
-            // Lets Colloide
-            bool colloided = causeCollision(newBallCenterWorld,ballRadius ,mazeVerticies_local,mazeModelMatrix);
-
-            if(colloided){
-
-            // We change the camera position based on the keys WASD/QE
+            // 3- Move Camera according to direction   to get new position of camera in World 
+             // We change the camera position based on the keys WASD/QE
             // S & W moves the player back and forth
             // Q & E moves the player up and down
             // A & D moves the player left or right
-            if(app->getKeyboard().isPressed(GLFW_KEY_W)) position -= front * (deltaTime * current_sensitivity.z);
-            if(app->getKeyboard().isPressed(GLFW_KEY_S)) position += front * (deltaTime * current_sensitivity.z);
-            if(app->getKeyboard().isPressed(GLFW_KEY_D)) position -= right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position += right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position -= up    * (deltaTime * current_sensitivity.y);
-            if(app->getKeyboard().isPressed(GLFW_KEY_E)) position += up    * (deltaTime * current_sensitivity.y);
+            if(app->getKeyboard().isPressed(GLFW_KEY_W)) newPosition += front * (deltaTime * current_sensitivity.z);
+            if(app->getKeyboard().isPressed(GLFW_KEY_S)) newPosition -= front * (deltaTime * current_sensitivity.z);
+            if(app->getKeyboard().isPressed(GLFW_KEY_D)) newPosition += right * (deltaTime * current_sensitivity.x);
+            if(app->getKeyboard().isPressed(GLFW_KEY_A)) newPosition -= right * (deltaTime * current_sensitivity.x);
+            if(app->getKeyboard().isPressed(GLFW_KEY_Q)) newPosition += up    * (deltaTime * current_sensitivity.y);
+            if(app->getKeyboard().isPressed(GLFW_KEY_E)) newPosition -= up    * (deltaTime * current_sensitivity.y);
 
+            // 4- get  direction of movement
+            bool colloided=false;
+            glm::vec3 movementDirection =glm::normalize(newPosition - position);
 
+            size_t element_count = (mazeElements.size() / 3) * 3;
+            for(size_t element = 0; element < element_count;){
+                glm::vec3 v0 = mazeModelMatrix * glm::vec4(mazeVerticies_local[mazeElements[element++]].position, 1.0f);
+                glm::vec3 v1 = mazeModelMatrix * glm::vec4(mazeVerticies_local[mazeElements[element++]].position, 1.0f);
+                glm::vec3 v2 = mazeModelMatrix * glm::vec4(mazeVerticies_local[mazeElements[element++]].position, 1.0f);
+                glm::vec2 barycentric_coords; float triangle_hit_distance;
+
+                if(glm::intersectRayTriangle(position, movementDirection, v0, v1, v2, barycentric_coords, triangle_hit_distance)){
+                    if(triangle_hit_distance>0 && triangle_hit_distance<= glm::distance(position,newPosition)){
+                            colloided=true;
+                            break;
+                    }                    
+                }
             }
+            // 5- Check condition of collision
+            if(!colloided) {position=newPosition;}
 
   
         }
