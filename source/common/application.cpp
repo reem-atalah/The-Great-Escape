@@ -269,6 +269,7 @@ int our::Application::run(int run_for_frames) {
             ImVec4 *colors = style->Colors;
             colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f,0.0f,0.0f,0.0f);
             colors[ImGuiCol_ButtonActive] = ImVec4(0.0f,0.0f,0.0f,0.0f);
+            colors[ImGuiCol_Button] = ImVec4(0.0f,0.0f,0.0f,0.0f);
 
             ImGui::PushFont(font_words);
             if(ImGui::Button("Please! Lead me out ", ImVec2(220,210)))
