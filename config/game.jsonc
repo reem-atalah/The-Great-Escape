@@ -103,21 +103,30 @@
                     },
                     {
                         "type": "Free Camera Controller"
+                        
+                    },
+                    {
+                        "type": "Light",
+                        "lightType": "point",
+                        "diffuse":[ 0.7, 0.2, 0.1],
+                        "specular":[0.7, 0.2, 0.1],
+                        "cone_angles":[10,60],
+                        "attenuation":[0.001, 0.001 ,0.0001]
                     }
                 ],
                 "children": [
-                    {
-                        "components": [
-                            {
-                                "type": "Light",
-                                "lightType": "spot",
-                                "diffuse":[ 0.7, 0.2, 0.1],
-                                "specular":[0.7, 0.2, 0.1],
-                                "cone_angles":[20,60],
-                                "attenuation":[0.1, 0.1 ,0.001]
-                            }
-                        ]
-                    }
+                    // {
+                    //     "components": [
+                    //         {
+                    //             "type": "Light",
+                    //             "lightType": "spot",
+                    //             "diffuse":[ 0.7, 0.2, 0.1],
+                    //             "specular":[0.7, 0.2, 0.1],
+                    //             "cone_angles":[20,60],
+                    //             "attenuation":[0.1, 0.1 ,0.001]
+                    //         }
+                    //     ]
+                    // }
                 ]
             },
             {
