@@ -206,6 +206,8 @@ int our::Application::run(int run_for_frames) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
+    ImFont *font_words = io.Fonts->AddFontFromFileTTF("assets\\fonts\\StrongGirls.otf", 18.0f);
+    ImFont *font_numbers = io.Fonts->AddFontFromFileTTF("assets\\fonts\\Harland Roselyn.ttf", 40.0f);
     ImGui::StyleColorsDark();
 
     // Initialize ImGui for GLFW and OpenGL
@@ -253,26 +255,71 @@ int our::Application::run(int run_for_frames) {
 
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
-        ImGui::Begin("Hi", false  , ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+        //  
+        ImGui::Begin("Hi menus!", false, ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove );
 
         // Draw start button in main menu
         if(changedState == "menu" )
         {
             auto time = std::time(nullptr);
             auto localtime = std::localtime(&time);
-            // std::cout<<localtime->tm_min;
-            
-            if(ImGui::Button("Lead me to the out, Please !", ImVec2(210,50)))
+
+            // Button to start game
+            ImGuiStyle *style = &ImGui::GetStyle();
+            ImVec4 *colors = style->Colors;
+            colors[ImGuiCol_ButtonHovered] = ImVec4(0.0f,0.0f,0.0f,0.0f);
+            colors[ImGuiCol_ButtonActive] = ImVec4(0.0f,0.0f,0.0f,0.0f);
+
+            ImGui::PushFont(font_words);
+            if(ImGui::Button("Please! Lead me out ", ImVec2(220,210)))
             {
                 startGameTime = localtime->tm_min;
                 our::Application::changeState("game");
             }
-            
+            ImGui::PopFont();
         }
 
-        // In game state, check if time has finished
+        if(changedState == "lose")
+        {
+            ImGui::PushFont(font_words);
+            ImGui::Text(" \n Ooops ! \n\n Game Over ! \n\n I'm stuck now :(");
+
+            // auto time = std::time(nullptr);
+            // auto localtime = std::localtime(&time);
+            
+            // if(ImGui::Button("You can try again :)", ImVec2(210,50)))
+            // {
+            //     startGameTime = localtime->tm_min;
+            //     our::Application::changeState("game");
+            // }
+            ImGui::PopFont();
+        }
+
+        if(changedState == "win")
+        {
+            ImGui::PushFont(font_numbers);
+            ImGui::Text(" You win! \n Finally I'm out \n Great job! <3");
+
+            // auto time = std::time(nullptr);
+            // auto localtime = std::localtime(&time);
+            
+            // if(ImGui::Button("Want to try again ?", ImVec2(210,50)))
+            // {
+            //     startGameTime = localtime->tm_min;
+            //     our::Application::changeState("game");
+            // }
+            ImGui::PopFont();
+        }
+
+        
+        ImGui::End();
+
+
+        // In game state, check if time has finished or if we win
         if(changedState == "game") 
         {
+            //  
+            ImGui::Begin("Hi game!", false , ImGuiWindowFlags_NoBackground  | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
             auto time = std::time(nullptr);
             auto localtime = std::localtime(&time);
             
@@ -284,7 +331,10 @@ int our::Application::run(int run_for_frames) {
             }
             // Display time
             std::string tmp = std::to_string(TOTAL_GAME_TIME - traceTime);
+
+            ImGui::PushFont(font_numbers);
             ImGui::Text(tmp.c_str());
+            ImGui::PopFont();
             
             if(traceTime == TOTAL_GAME_TIME)
             {
@@ -297,37 +347,11 @@ int our::Application::run(int run_for_frames) {
                 startGameTime = 0;
                 our::Application::changeState("win");
             }
+
+            ImGui::End();
         }
 
-        if(changedState == "lose")
-        {
-            ImGui::Text("Game Over !");
-
-            auto time = std::time(nullptr);
-            auto localtime = std::localtime(&time);
-            
-            if(ImGui::Button("You can try again :)", ImVec2(210,50)))
-            {
-                startGameTime = localtime->tm_min;
-                our::Application::changeState("game");
-            }
-        }
-
-        if(changedState == "win")
-        {
-            ImGui::Text("You win ! Great job !");
-
-            auto time = std::time(nullptr);
-            auto localtime = std::localtime(&time);
-            
-            if(ImGui::Button("Want to try again ?", ImVec2(210,50)))
-            {
-                startGameTime = localtime->tm_min;
-                our::Application::changeState("game");
-            }
-        }
-
-        ImGui::End();
+        
 
         // If ImGui is using the mouse or keyboard, then we don't want the captured events to affect our keyboard and mouse objects.
         // For example, if you're focusing on an input and writing "W", the keyboard object shouldn't record this event.
