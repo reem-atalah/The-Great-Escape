@@ -1,5 +1,5 @@
 {
-    "start-scene": "main",
+    "start-scene": "game",
     "window":
     {
         "title":"Default Game Window",
