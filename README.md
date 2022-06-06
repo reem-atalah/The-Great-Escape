@@ -54,15 +54,15 @@ Run this Command  .\bin\GAME_APPLICATION.exe -c="config\game\main_menu.jsonc"
 ## 📷 Game Demo<a name = "demo"></a>
 
 * Menu
-![menu](README/images/main_menu.png )
+![menu](images/main_menu.png )
 * Start Scene
-![Start Scene](README/images/start_scene.png )
+![Start Scene](images/start_scene.png )
 * End Scene
-![End Scene](README/images/end_scene.png )
+![End Scene](images/end_scene.png )
 * Lose Screen
-![Lose Screen](README/images/lose_scene.png )
+![Lose Screen](images/lose_scene.png )
 * Win Screen
-![Win Screen](README/images/won_state.png )
+![Win Screen](images/won_state.png )
 
 
 ## 💻 Included Libraries <a name = "IncludedLibraries"></a>
