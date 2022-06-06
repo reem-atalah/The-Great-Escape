@@ -14,8 +14,8 @@
 
 ### 📘 About<a name = "about"></a>
 
-What if the Triwizard Cup was the only way to survive for both Harry and Cedric Diggory with no Voldmort Waiting?
-The Great Escape game is a 3D maze in which your goal is to get out of the maze by reaching the 
+* What if the Triwizard Cup was the only way to survive for both Harry and Cedric Diggory with no Voldmort Waiting?
+* The Great Escape game is a 3D maze in which your goal is to get out of the maze by reaching the 
 trophy before your time ends and die.
 
 
@@ -54,15 +54,15 @@ Run this Command  .\bin\GAME_APPLICATION.exe -c="config\game\main_menu.jsonc"
 ## 📷 Game Demo<a name = "demo"></a>
 
 * Menu
-![menu](README/images/main_menu.png )
+![menu](images/main_menu.png )
 * Start Scene
-![Start Scene](README/images/start_scene.png )
+![Start Scene](images/start_scene.png )
 * End Scene
-![End Scene](README/images/end_scene.png )
+![End Scene](images/end_scene.png )
 * Lose Screen
-![Lose Screen](README/images/lose_scene.png )
+![Lose Screen](images/lose_scene.png )
 * Win Screen
-![Win Screen](README/images/won_state.png )
+![Win Screen](images/won_state.png )
 
 
 ## 💻 Included Libraries <a name = "IncludedLibraries"></a>
@@ -87,7 +87,7 @@ Run this Command  .\bin\GAME_APPLICATION.exe -c="config\game\main_menu.jsonc"
 ## 📜 Future Work <a name = "additions"></a>
 
 * Adding Sound
-* Adding Monstors
+* Adding Monsters
 * Adding different Game Levels
 
 
